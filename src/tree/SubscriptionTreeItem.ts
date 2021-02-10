@@ -5,7 +5,6 @@
 
 import { StorageManagementClient } from '@azure/arm-storage';
 import { StorageAccountsListNextResponse } from '@azure/arm-storage/esm/models';
-import * as vscode from 'vscode';
 import { AzExtTreeItem, AzureTreeItem, AzureWizard, AzureWizardExecuteStep, AzureWizardPromptStep, ICreateChildImplContext, IStorageAccountWizardContext, LocationListStep, ResourceGroupCreateStep, ResourceGroupListStep, StorageAccountKind, StorageAccountPerformance, StorageAccountReplication, SubscriptionTreeItemBase, VerifyProvidersStep } from 'vscode-azureextensionui';
 import { ISelectStorageAccountContext } from '../commands/selectStorageAccountNodeForCommand';
 import { createStorageClient } from '../utils/azureClients';
@@ -83,10 +82,8 @@ export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
             wizardContext.newResourceGroupName = await wizardContext.relatedNameTask;
         }
 
-        await vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, async () => {
-            context.showCreatingTreeItem(nonNull(wizardContext.newStorageAccountName));
-            await wizard.execute();
-        });
+        context.showCreatingTreeItem(nonNull(wizardContext.newStorageAccountName));
+        await wizard.execute();
 
         // In case this account has been created via a deploy or browse command, the enable website hosting prompt shouldn't be shown
         (<ISelectStorageAccountContext>context).showEnableWebsiteHostingPrompt = false;
